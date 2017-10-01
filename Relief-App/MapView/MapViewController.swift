@@ -19,7 +19,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     var selfLocation : CLLocation! = CLLocation()
     
     var locations : [(CLLocation, String)] = []
-    var updates : [String]?
+    var disasters : [String] = []
     
     var spanX : Double!
     var spanY : Double!
@@ -76,15 +76,24 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
                         guard let valueString = fields["name"] as? String else{return}
                         
                         var name = ""
+                        var disaster = ""
+                        var switchDisaster = false
                         for c in valueString
                         {
                             if(c == ":")
                             {
-                                break
+                                switchDisaster = true
                             }
-                            
-                            name += "\(c)"
+                            else
+                            {
+                                if(!switchDisaster){ name += "\(c)"}
+                                else{
+                                    disaster += "\(c)"
+                                }
+                            }
                         }
+                        
+                        self.disasters.append(disaster)
                         
                         let request = MKLocalSearchRequest()
                         request.naturalLanguageQuery = name
@@ -107,6 +116,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
                                     let long = location.coordinate.longitude
                                     let destLocation = CLLocation(latitude: lat, longitude: long)
                                     self.goToLocation(destLocation: destLocation)
+                                    self.goToLocation(destLocation: self.selfLocation)
                                 }
                             }
                         })
@@ -162,10 +172,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         print("MAX X: \(maxX) CURR: \(spanX) ")
         print("MAX Y: \(maxY) CURR: \(spanY) ")
         
-        span = MKCoordinateSpanMake(maxX, maxY)//spanX, spanY)
-        
-        let region = MKCoordinateRegionMake(self.selfLocation.coordinate, span)
+        let region = MKCoordinateRegionMakeWithDistance(destLocation.coordinate, maxX, maxY)
         mapView.setRegion(region, animated: true)
+    }
+    
+    @objc func TapLocation(_ sender : IPTap)
+    {
+        guard let row = sender.indexPath?.row else{return}
+        let loca = self.locations[row]
+        goToLocation(destLocation: loca.0)
     }
 }
 
@@ -185,8 +200,10 @@ extension MapViewController: UITableViewDelegate, UITableViewDataSource
 //        print("")
         
         cell.timeLabel.text = self.locations[indexPath.row].1
-        cell.detailLabel.text = "Latitude: \(self.locations[indexPath.row].0.coordinate.latitude), Longitude: \(self.locations[indexPath.row].0.coordinate.longitude)"
-        
+        cell.detailLabel.text = disasters[indexPath.row]
+        let recog = IPTap(target: self, action: #selector(TapLocation(_:)))
+        recog.indexPath = indexPath
+        cell.addGestureRecognizer(recog)
         return cell
     }
     
@@ -197,4 +214,9 @@ extension MapViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.locations.count
     }
+}
+
+class IPTap : UITapGestureRecognizer
+{
+    var indexPath : IndexPath?
 }
