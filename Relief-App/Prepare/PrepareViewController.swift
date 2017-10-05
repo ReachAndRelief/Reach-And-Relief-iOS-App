@@ -44,13 +44,74 @@ class PrepareViewController: UIViewController {
 extension PrepareViewController: UITableViewDelegate, UITableViewDataSource
 {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return 3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AlertCell", for: indexPath) as! AlertCell
-        cell.timeLabel.text = "Gura Siyas"
-        cell.detailLabel.text = "305 Address Street"
+        
+        if(indexPath.section == 0)
+        {
+            switch(indexPath.row)
+            {
+            case 0:
+                cell.timeLabel.text = "WalMart"
+                cell.detailLabel.text = "305 575 2254."
+                break
+            case 1:
+                cell.timeLabel.text = "Costco"
+                cell.detailLabel.text = "305 878 1287."
+                break
+            case 2:
+                cell.timeLabel.text = "Sam's Club"
+                cell.detailLabel.text = "305 110 8989."
+                break
+            default:
+                break
+            }
+        }
+        else if(indexPath.section == 1)
+        {
+            switch(indexPath.row)
+            {
+            case 0:
+                cell.timeLabel.text = "Florida International University"
+                cell.detailLabel.text = "305 434 6363."
+                break
+            case 1:
+                cell.timeLabel.text = "Lago Mar High School"
+                cell.detailLabel.text = "305 234 8765."
+                break
+            case 2:
+                cell.timeLabel.text = "Saint Thomas Church"
+                cell.detailLabel.text = "305 643 2633."
+                break
+            default:
+                break
+            }
+        }
+        else
+        {
+            switch(indexPath.row)
+            {
+            case 0:
+                cell.timeLabel.text = "Home Depot"
+                cell.detailLabel.text = "305 554 2498."
+                break
+            case 1:
+                cell.timeLabel.text = "Lowes'"
+                cell.detailLabel.text = "305 346 7178."
+                break
+            case 2:
+                cell.timeLabel.text = "Red Cross"
+                cell.detailLabel.text = "305 223 5554."
+                break
+            default:
+                break
+            }
+        }
+        
+        
         return cell
     }
     
@@ -67,7 +128,7 @@ extension PrepareViewController: UITableViewDelegate, UITableViewDataSource
         }
         else
         {
-            title.text = "Safety"
+            title.text = "Supplies"
         }
         
         view.addSubview(title)

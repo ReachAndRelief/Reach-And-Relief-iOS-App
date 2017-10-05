@@ -42,13 +42,51 @@ class EmergencyViewController: UIViewController {
 extension EmergencyViewController: UITableViewDelegate, UITableViewDataSource
 {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return 3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AlertCell", for: indexPath) as! AlertCell
-        cell.timeLabel.text = "Emer Gency"
-        cell.detailLabel.text = "(305) 503-3050"
+        if(indexPath.section == 0)
+        {
+            switch(indexPath.row)
+            {
+            case 0:
+                cell.timeLabel.text = "Miami-Dade Hotline"
+                cell.detailLabel.text = "305-468-5900"
+                break
+            case 1:
+                cell.timeLabel.text = "FIU Hotline"
+                cell.detailLabel.text = "305-348-2401"
+                break
+            case 2:
+                cell.timeLabel.text = "Florida Disaster\nRelief Contact"
+                cell.detailLabel.text = "1 (800) 462-7585"
+                break
+            default:
+                break
+            }
+        }
+        else if(indexPath.section == 1)
+        {
+            switch(indexPath.row)
+            {
+            case 0:
+                cell.timeLabel.text = "Red Cross"
+                cell.detailLabel.text = "1 (800) 733-2767"
+                break
+            case 1:
+                cell.timeLabel.text = "Peace Corp."
+                cell.detailLabel.text = "855.855.1961"
+                break
+            case 2:
+                cell.timeLabel.text = "FEMA"
+                cell.detailLabel.text = "1 (800) 621-3362"
+                break
+            default:
+                break
+            }
+        }
         return cell
     }
     
